@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Админ-панель — Garage Detailing</title>
+<script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+<style>
+:root{--bg:#07070c;--card:#12121c;--card2:#1a1a28;--border:#272738;--text:#f1f1f6;--muted:#9696aa;--acc:#2ad4ff;--acc2:#8b6cff;--ok:#33d17a;--bad:#ff5f6d;--warn:#ffb347;--top:0px;--bottom:0px}
+*{box-sizing:border-box;margin:0}
+body{font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);padding:calc(var(--top) + 12px) 12px calc(var(--bottom) + 32px);overscroll-behavior:none}
+h1{font-size:20px;margin-bottom:2px}h2{font-size:17px;margin:18px 0 10px}
+.muted{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:14px -12px 14px;padding:0 12px 4px;position:sticky;top:0;background:var(--bg);z-index:5;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 13px;border-radius:999px;font-size:14px;cursor:pointer}
+.tabs button.on{background:linear-gradient(90deg,var(--acc2),var(--acc));border-color:transparent;color:#07070c;font-weight:700}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sp{justify-content:space-between}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input,textarea,select{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--acc);border-color:transparent}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn.pri{background:linear-gradient(90deg,var(--acc2),var(--acc));color:#07070c;border:0}
+.btn.ok{background:var(--ok);color:#07070c;border:0}.btn.bad{background:transparent;color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:7px 11px;font-size:13px}.btn.full{width:100%;margin-top:14px}
+.btn:disabled{opacity:.5}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.b-new{background:rgba(255,179,71,.15);color:var(--warn)}.b-confirmed{background:rgba(51,209,122,.15);color:var(--ok)}.b-cancelled{background:rgba(255,95,109,.15);color:var(--bad)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chips button{border:1px solid var(--border);background:transparent;color:var(--muted);padding:6px 11px;border-radius:999px;font-size:13px}
+.chips button.on{color:var(--text);border-color:var(--acc)}
+.err{color:var(--bad);font-size:12px;margin-top:3px}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:flex;gap:6px;align-items:center;margin:0;padding:6px 10px;border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px}
+.checks input{width:auto}
+.img-prev{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:var(--card2);margin:8px 0}
+.list>div{padding:10px 0;border-top:1px solid var(--border)}.list>div:first-child{border-top:0}
+.empty{text-align:center;color:var(--muted);padding:30px 0}
+.gate{min-height:80vh;display:grid;place-items:center;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(var(--bottom) + 20px);transform:translateX(-50%);background:#1f1f30;border:1px solid var(--border);padding:10px 16px;border-radius:10px;opacity:0;transition:.2s;pointer-events:none;z-index:50;max-width:90%}
+.toast.show{opacity:1}
+.dlg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:flex-end;z-index:40}
+.dlg.open{display:flex}.dlg .card{width:100%;max-width:560px;max-height:88vh;overflow:auto;margin:0 auto calc(var(--bottom) + 10px);border-radius:16px}
+.progress{height:6px;background:var(--card2);border-radius:3px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;background:var(--acc)}
+.svc-cat{font-size:12px;color:var(--acc);text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div id="app"><div class="gate"><div><h1>Загрузка…</h1></div></div></div>
+<div class="dlg" id="dlg"><div class="card" id="dlgBody"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+(function () {
+  'use strict';
+  var tg = window.Telegram && window.Telegram.WebApp;
+  var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.from((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); };
+  var rub = function (n) { return Number(n).toLocaleString('ru-RU') + ' ₽'; };
+  var dur = function (m) { var h = Math.floor(m / 60), mm = m % 60; return (h ? h + ' ч' : '') + (h && mm ? ' ' : '') + (mm ? mm + ' мин' : ''); };
+  var dt = function (iso) { if (!iso) return '—'; var d = new Date(iso); return d.toLocaleDateString('ru-RU') + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); };
+  var S = null, tab = 'bookings', filter = 'new', userQ = '';
+  var WD = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+  function toast(m) { var t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(function () { t.classList.remove('show'); }, 3000); }
+  function haptic(k) { try { tg.HapticFeedback.notificationOccurred(k); } catch (e) {} }
+  function confirmAsk(text) { return new Promise(function (res) { if (tg && tg.showConfirm && tg.isVersionAtLeast('6.2')) tg.showConfirm(text, res); else res(window.confirm(text)); }); }
+
+  if (!tg || !tg.initData) {
+    $('#app').innerHTML = '<div class="gate"><div><h1>Только через Telegram</h1><p class="muted" style="margin-top:8px">Откройте бота и отправьте команду <b>/admin</b>.<br>Доступ выдаётся по Telegram ID.</p></div></div>';
+    return;
+  }
+  tg.ready(); tg.expand();
+  try { tg.setHeaderColor('#07070c'); tg.setBackgroundColor('#07070c'); if (tg.isVersionAtLeast('7.7')) tg.disableVerticalSwipes(); } catch (e) {}
+  function insets() { var s = tg.safeAreaInsets || {}, c = tg.contentSafeAreaInsets || {}; document.documentElement.style.setProperty('--top', ((s.top || 0) + (c.top || 0)) + 'px'); document.documentElement.style.setProperty('--bottom', ((s.bottom || 0) + (c.bottom || 0)) + 'px'); }
+  insets(); ['safeAreaChanged', 'contentSafeAreaChanged', 'fullscreenChanged'].forEach(function (e) { try { tg.onEvent(e, insets); } catch (x) {} });
+  try { if (tg.isVersionAtLeast('6.1')) { tg.BackButton.show(); tg.BackButton.onClick(function () { location.href = '/'; }); } } catch (e) {}
+
+  function api(path, body) {
+    return fetch('/api/admin/' + path, { method: body === undefined ? 'GET' : 'POST', headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': tg.initData }, body: body === undefined ? undefined : JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, error: 'Ошибка сервера' }; }).then(function (j) { j._status = r.status; return j; }); })
+      .catch(function () { return { ok: false, error: 'Нет связи с сервером' }; });
+  }
+  function load() {
+    return api('state').then(function (j) {
+      if (!j.ok) { $('#app').innerHTML = '<div class="gate"><div><h1>Нет доступа</h1><p class="muted" style="margin-top:8px">' + esc(j.error || '') + '</p></div></div>'; return; }
+      S = j; render();
+    });
+  }
+  function act(path, body, okMsg) {
+    return api(path, body).then(function (j) {
+      if (j.ok) { haptic('success'); if (okMsg) toast(okMsg); return load().then(function () { return j; }); }
+      haptic('error'); toast(j.error || 'Проверьте поля'); return j;
+    });
+  }
+  function showErrors(form, errors) {
+    $$('.err', form).forEach(function (e) { e.remove(); });
+    Object.keys(errors || {}).forEach(function (k) {
+      var f = form.querySelector('[name="' + k + '"]') || form.querySelector('[data-err="' + k + '"]');
+      var d = document.createElement('div'); d.className = 'err'; d.textContent = errors[k];
+      (f ? f.parentNode : form).appendChild(d);
+    });
+  }
+
+  // ---------- рендер ----------
+  var TABS = [['bookings', '📋 Заявки'], ['services', '🧽 Услуги'], ['data', '🏢 Данные'], ['images', '🖼 Картинки'], ['broadcast', '📣 Рассылка'], ['users', '👥 Участники'], ['admins', '🔑 Админы']];
+  function render() {
+    var newCount = S.bookings.filter(function (b) { return b.status === 'new'; }).length;
+    $('#app').innerHTML = '<div class="row sp"><div><h1>Админ-панель</h1><div class="muted">' + esc(S.config.business.name) + ' · ' + esc(S.me.name || '') + ' (ID ' + esc(S.me.id) + ')</div></div></div>' +
+      '<div class="tabs">' + TABS.map(function (t) { return '<button data-tab="' + t[0] + '"' + (t[0] === tab ? ' class="on"' : '') + '>' + t[1] + (t[0] === 'bookings' && newCount ? ' · ' + newCount : '') + '</button>'; }).join('') + '</div><div id="view"></div>';
+    $$('[data-tab]').forEach(function (b) { b.onclick = function () { tab = b.dataset.tab; render(); window.scrollTo(0, 0); }; });
+    ({ bookings: vBookings, services: vServices, data: vData, images: vImages, broadcast: vBroadcast, users: vUsers, admins: vAdmins })[tab]($('#view'));
+  }
+
+  // ---- Заявки
+  var ST = { new: 'Ждёт решения', confirmed: 'Подтверждена', cancelled: 'Отменена' };
+  function vBookings(el) {
+    var list = S.bookings.filter(function (b) { return filter === 'all' || b.status === filter; });
+    if (filter !== 'all') list.sort(function (a, b) { return (a.date + a.time).localeCompare(b.date + b.time); });
+    el.innerHTML = '<div class="chips">' + [['new', 'Новые'], ['confirmed', 'Подтверждённые'], ['cancelled', 'Отменённые'], ['all', 'Все']].map(function (f) { return '<button data-f="' + f[0] + '"' + (f[0] === filter ? ' class="on"' : '') + '>' + f[1] + '</button>'; }).join('') + '</div>' +
+      (list.length ? list.map(function (b) {
+        var d = b.date.split('-');
+        return '<div class="card"><div class="row sp"><b>#' + esc(b.id) + ' · ' + d[2] + '.' + d[1] + ' в ' + esc(b.time) + '</b><span class="badge b-' + b.status + '">' + ST[b.status] + '</span></div>' +
+          '<div style="margin-top:6px">👤 ' + esc(b.name) + ' · <a href="tel:' + esc(b.phone) + '" style="color:var(--acc)">' + esc(b.phone) + '</a></div>' +
+          '<div>🚘 ' + esc(b.car) + ' · ' + esc(b.carClassName) + '</div><div>🧽 ' + esc((b.serviceNames || []).join(', ')) + '</div>' +
+          '<div>💰 от ' + rub(b.price) + ' · ⏱ ' + dur(b.minutes) + '</div>' + (b.comment ? '<div>💬 ' + esc(b.comment) + '</div>' : '') +
+          (b.tgUser ? '<div class="muted">✈️ Telegram: ' + (b.tgUser.username ? '@' + esc(b.tgUser.username) : esc(b.tgUser.name)) + ' · ID ' + esc(b.tgUser.id) + '</div>' : '') +
+          '<div class="muted">Создана ' + dt(b.createdAt) + '</div>' +
+          '<div class="row" style="margin-top:10px">' +
+          (b.status === 'new' ? '<button class="btn ok sm" data-ok="' + b.id + '">✅ Подтвердить</button>' : '') +
+          (b.status !== 'cancelled' ? '<button class="btn bad sm" data-no="' + b.id + '">❌ Отменить</button>' : '') +
+          (b.tgUser ? '<button class="btn sm" data-msg="' + b.tgUser.id + '">✉️ Написать</button><button class="btn sm" data-ban="' + b.tgUser.id + '">🚫 Бан</button>' : '') +
+          '</div></div>';
+      }).join('') : '<div class="empty">Заявок нет</div>');
+    $$('[data-f]', el).forEach(function (b) { b.onclick = function () { filter = b.dataset.f; render(); }; });
+    $$('[data-ok]', el).forEach(function (b) { b.onclick = function () { b.disabled = true; act('booking', { id: b.dataset.ok, act: 'ok' }, 'Запись подтверждена'); }; });
+    $$('[data-no]', el).forEach(function (b) { b.onclick = function () { confirmAsk('Отменить запись #' + b.dataset.no + '? Время снова станет свободным.').then(function (y) { if (y) act('booking', { id: b.dataset.no, act: 'no' }, 'Запись отменена'); }); }; });
+    bindUserButtons(el);
+  }
+
+  // ---- Услуги
+  function svcForm(s) {
+    s = s || { category: '', name: '', desc: '', price: '', minutes: S.config.schedule.slotMinutes * 2, excludes: [] };
+    var slot = S.config.schedule.slotMinutes, cats = Array.from(new Set(S.config.services.map(function (x) { return x.category; })));
+    var others = S.config.services.filter(function (x) { return x.id !== s.id; });
+    return '<form data-svc="' + esc(s.id || '') + '">' +
+      '<label>Вид услуги</label><input name="category" list="cats" value="' + esc(s.category) + '" placeholder="Например: Мойка" maxlength="40" required><datalist id="cats">' + cats.map(function (c) { return '<option value="' + esc(c) + '">'; }).join('') + '</datalist>' +
+      '<label>Название услуги</label><input name="name" value="' + esc(s.name) + '" maxlength="80" required>' +
+      '<label>Описание (необязательно)</label><input name="desc" value="' + esc(s.desc) + '" maxlength="200">' +
+      '<div class="grid2"><div><label>Цена, ₽ (для седана)</label><input name="price" type="number" inputmode="numeric" min="0" step="50" value="' + esc(s.price) + '" required></div>' +
+      '<div><label>Примерное время, мин</label><input name="minutes" type="number" inputmode="numeric" min="' + slot + '" step="' + slot + '" value="' + esc(s.minutes) + '" required></div></div>' +
+      '<div class="muted" data-dur style="margin-top:4px"></div>' +
+      (others.length ? '<label>Нельзя совмещать с</label><div class="checks">' + others.map(function (o) { return '<label><input type="checkbox" name="ex" value="' + esc(o.id) + '"' + ((s.excludes || []).indexOf(o.id) >= 0 ? ' checked' : '') + '>' + esc(o.name) + '</label>'; }).join('') + '</div>' : '') +
+      '<button class="btn pri full" type="submit">' + (s.id ? '💾 Сохранить' : '➕ Добавить услугу') + '</button></form>';
+  }
+  function bindSvcForm(form) {
+    var upd = function () { var m = +form.minutes.value; $('[data-dur]', form).textContent = m ? '≈ ' + dur(m) : ''; };
+    form.minutes.addEventListener('input', upd); upd();
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var body = { id: form.dataset.svc || undefined, category: form.category.value, name: form.name.value, desc: form.desc.value, price: Number(form.price.value), minutes: Number(form.minutes.value), excludes: $$('[name=ex]:checked', form).map(function (c) { return c.value; }) };
+      api('service', body).then(function (j) {
+        if (!j.ok) { haptic('error'); showErrors(form, j.errors); if (j.error) toast(j.error); return; }
+        haptic('success'); toast(body.id ? 'Услуга сохранена' : 'Услуга добавлена'); closeDlg(); load();
+      });
+    };
+  }
+  function vServices(el) {
+    var groups = {};
+    S.config.services.forEach(function (s) { (groups[s.category] = groups[s.category] || []).push(s); });
+    el.innerHTML = '<button class="btn pri full" style="margin:0 0 12px" data-add>➕ Добавить услугу</button>' +
+      Object.keys(groups).map(function (c) {
+        return '<h2>' + esc(c) + '</h2>' + groups[c].map(function (s) {
+          return '<div class="card"><div class="row sp"><b>' + esc(s.name) + '</b><b>от ' + rub(s.price) + '</b></div>' +
+            (s.desc ? '<div class="muted">' + esc(s.desc) + '</div>' : '') + '<div class="muted">⏱ ≈ ' + dur(s.minutes) + '</div>' +
+            '<div class="row" style="margin-top:10px"><button class="btn sm" data-edit="' + s.id + '">✏️ Изменить</button><button class="btn bad sm" data-del="' + s.id + '">🗑 Удалить</button></div></div>';
+        }).join('');
+      }).join('') + '<p class="muted">Цена указана для седана; для других классов авто умножается на коэффициент (вкладка «Данные»).</p>';
+    $('[data-add]', el).onclick = function () { openDlg('<h2 style="margin-top:0">Новая услуга</h2>' + svcForm()); bindSvcForm($('#dlgBody form')); };
+    $$('[data-edit]', el).forEach(function (b) { b.onclick = function () { var s = S.config.services.filter(function (x) { return x.id === b.dataset.edit; })[0]; openDlg('<h2 style="margin-top:0">Изменить услугу</h2>' + svcForm(s)); bindSvcForm($('#dlgBody form')); }; });
+    $$('[data-del]', el).forEach(function (b) {
+      b.onclick = function () {
+        var s = S.config.services.filter(function (x) { return x.id === b.dataset.del; })[0];
+        confirmAsk('Удалить услугу «' + s.name + '»? Она пропадёт с сайта. Уже созданные записи сохранятся.').then(function (y) { if (y) act('service-delete', { id: s.id }, 'Услуга удалена'); });
+      };
+    });
+  }
+
+  // ---- Данные
+  function vData(el) {
+    var b = S.config.business, s = S.config.schedule;
+    var f = function (name, label, val, attrs) { return '<div><label>' + label + '</label><input name="' + name + '" value="' + esc(val) + '" ' + (attrs || '') + '></div>'; };
+    el.innerHTML = '<form class="card" id="bizForm"><h2 style="margin-top:0">Контакты</h2>' +
+      f('name', 'Название', b.name) + '<div class="grid2">' + f('city', 'Город', b.city) + f('address', 'Адрес', b.address) + '</div>' +
+      '<div class="grid2">' + f('phone', 'Телефон (для звонка)', b.phone, 'inputmode="tel"') + f('phoneDisplay', 'Телефон (как показывать)', b.phoneDisplay) + '</div>' +
+      f('vk', 'ВКонтакте (ссылка)', b.vk, 'inputmode="url"') + f('yandexMaps', 'Яндекс Карты (ссылка)', b.yandexMaps, 'inputmode="url"') +
+      '<div class="grid2">' + f('rating', 'Рейтинг', b.rating, 'inputmode="decimal"') + f('ratingCount', 'Кол-во оценок', b.ratingCount, 'type="number"') + '</div>' +
+      '<h2>Режим работы и запись</h2><div class="grid2">' + f('open', 'Открытие', s.open, 'type="time" step="1800"') + f('close', 'Закрытие', s.close, 'type="time" step="1800"') + '</div><div data-err="hours"></div>' +
+      '<label>Выходные дни</label><div class="checks" data-err="closedWeekdays">' + [1, 2, 3, 4, 5, 6, 0].map(function (d) { return '<label><input type="checkbox" name="wd" value="' + d + '"' + (s.closedWeekdays.indexOf(d) >= 0 ? ' checked' : '') + '>' + WD[d] + '</label>'; }).join('') + '</div>' +
+      '<div class="grid2">' + f('daysAhead', 'Запись на сколько дней вперёд', s.daysAhead, 'type="number" min="1" max="180"') + f('minLeadMinutes', 'Минимум минут до записи', s.minLeadMinutes, 'type="number" min="0" step="30"') + '</div>' +
+      f('boxes', 'Боксов (машин одновременно)', s.boxes, 'type="number" min="1" max="20"') +
+      '<h2>Цены по классам авто</h2><p class="muted">Цена услуги × коэффициент. 1 = базовая цена.</p>' +
+      S.config.carClasses.map(function (c) { return '<div class="grid2" data-cc="' + c.id + '"><div><label>Класс</label><input name="ccName" value="' + esc(c.name) + '"></div><div><label>Коэффициент</label><input name="ccFactor" type="number" step="0.05" min="0.5" max="5" value="' + c.factor + '"></div><div data-err="cc_' + c.id + '"></div></div>'; }).join('') +
+      '<button class="btn pri full" type="submit">💾 Сохранить данные</button></form>';
+    var form = $('#bizForm');
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var v = function (n) { return form.querySelector('[name="' + n + '"]').value; };
+      var body = {
+        business: { name: v('name'), city: v('city'), address: v('address'), phone: v('phone'), phoneDisplay: v('phoneDisplay'), vk: v('vk'), yandexMaps: v('yandexMaps'), rating: v('rating'), ratingCount: Number(v('ratingCount')) },
+        schedule: { open: v('open'), close: v('close'), closedWeekdays: $$('[name=wd]:checked', form).map(function (c) { return +c.value; }), daysAhead: Number(v('daysAhead')), minLeadMinutes: Number(v('minLeadMinutes')), boxes: Number(v('boxes')) },
+        carClasses: $$('[data-cc]', form).map(function (r) { return { id: r.dataset.cc, name: $('[name=ccName]', r).value, factor: Number($('[name=ccFactor]', r).value) }; })
+      };
+      api('business', body).then(function (j) { if (!j.ok) { haptic('error'); showErrors(form, j.errors); toast('Проверьте поля'); return; } haptic('success'); toast('Данные сохранены'); load(); });
+    };
+  }
+
+  // ---- Картинки
+  function shrink(file) {
+    return new Promise(function (res, rej) {
+      var r = new FileReader(); r.onerror = rej;
+      r.onload = function () {
+        if (file.size < 1.5 * 1024 * 1024) return res(r.result);
+        var img = new Image(); img.onerror = function () { res(r.result); };
+        img.onload = function () {
+          var k = Math.min(1, 2400 / img.width), c = document.createElement('canvas');
+          c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', 0.86));
+        };
+        img.src = r.result;
+      };
+      r.readAsDataURL(file);
+    });
+  }
+  function vImages(el) {
+    el.innerHTML = Object.keys(S.slots).map(function (k) {
+      var url = S.config.images[k];
+      return '<div class="card"><b>' + esc(S.slots[k]) + '</b><img class="img-prev" src="' + esc(url.charAt(0) === '/' ? url : '/' + url) + '" alt="">' +
+        '<div class="row"><label class="btn sm" style="margin:0;color:var(--text)">📤 Загрузить<input type="file" accept="image/jpeg,image/png,image/webp" data-slot="' + k + '" hidden></label>' +
+        (url.indexOf('/uploads/') === 0 ? '<button class="btn sm" data-reset="' + k + '">↩️ Вернуть стандартную</button>' : '') + '</div></div>';
+    }).join('') + '<p class="muted">JPG, PNG или WEBP до 6 МБ. Для компьютера — горизонтальная (≈1920×1080), для телефона — 4:3 (≈1200×900).</p>';
+    $$('[data-slot]', el).forEach(function (inp) {
+      inp.onchange = function () {
+        var file = inp.files[0]; if (!file) return;
+        toast('Загружаем…');
+        shrink(file).then(function (dataUrl) { return act('image', { slot: inp.dataset.slot, dataUrl: dataUrl }, 'Картинка обновлена'); });
+      };
+    });
+    $$('[data-reset]', el).forEach(function (b) { b.onclick = function () { act('image', { slot: b.dataset.reset, dataUrl: null }, 'Стандартная картинка возвращена'); }; });
+  }
+
+  // ---- Рассылка
+  var bcTimer = null;
+  function vBroadcast(el) {
+    var n = S.users.filter(function (u) { return !u.banned && !u.blockedBot; }).length, bc = S.broadcast;
+    el.innerHTML = '<div class="card"><h2 style="margin-top:0">Оповещение всем участникам</h2><p class="muted">Получат: <b>' + n + '</b> (кроме забаненных и заблокировавших бота). К сообщению добавится кнопка «Открыть приложение».</p>' +
+      '<textarea id="bcText" maxlength="4000" placeholder="Например: Скидка 20% на керамику до конца месяца!"></textarea>' +
+      '<button class="btn pri full" id="bcSend"' + (bc && bc.running ? ' disabled' : '') + '>📣 Отправить всем</button></div>' +
+      (bc ? '<div class="card"><b>' + (bc.running ? '⏳ Рассылка идёт…' : '✅ Последняя рассылка') + '</b><div class="muted">' + dt(bc.startedAt) + ' · «' + esc(bc.text.slice(0, 60)) + (bc.text.length > 60 ? '…' : '') + '»</div>' +
+        '<div class="progress"><i style="width:' + (bc.total ? Math.round((bc.sent + bc.failed) / bc.total * 100) : 100) + '%"></i></div>' +
+        '<div class="muted" style="margin-top:6px">Доставлено ' + bc.sent + ' из ' + bc.total + (bc.failed ? ' · не доставлено ' + bc.failed + (bc.blocked ? ' (заблокировали бота: ' + bc.blocked + ')' : '') : '') + '</div></div>' : '') +
+      '<div class="card"><h2 style="margin-top:0">Сообщение одному участнику</h2><label>Telegram ID</label><input id="pmId" inputmode="numeric" placeholder="123456789"><label>Текст</label><textarea id="pmText" maxlength="4000"></textarea><button class="btn pri full" id="pmSend">✉️ Отправить</button></div>';
+    $('#bcSend').onclick = function () {
+      var text = $('#bcText').value.trim(); if (!text) return toast('Введите текст');
+      confirmAsk('Отправить сообщение ' + n + ' участникам?').then(function (y) { if (y) act('broadcast', { text: text }, 'Рассылка запущена'); });
+    };
+    $('#pmSend').onclick = function () { act('message', { userId: $('#pmId').value.trim(), text: $('#pmText').value.trim() }, 'Сообщение отправлено'); };
+    clearTimeout(bcTimer);
+    if (bc && bc.running) bcTimer = setTimeout(function () { if (tab === 'broadcast') load(); }, 2000);
+  }
+
+  // ---- Участники
+  function msgDialog(id) {
+    var u = S.users.filter(function (x) { return x.id === String(id); })[0];
+    openDlg('<h2 style="margin-top:0">Сообщение ' + esc(u ? (u.name || u.username || id) : id) + '</h2><textarea id="dlgText" maxlength="4000"></textarea><div class="row" style="margin-top:12px"><button class="btn pri" id="dlgSend">Отправить</button><button class="btn" data-close>Отмена</button></div>');
+    $('#dlgSend').onclick = function () { act('message', { userId: String(id), text: $('#dlgText').value.trim() }, 'Сообщение отправлено').then(function (j) { if (j.ok) closeDlg(); }); };
+  }
+  function banToggle(id, banned) {
+    if (!banned) return act('ban', { userId: String(id), banned: false }, 'Пользователь разбанен');
+    openDlg('<h2 style="margin-top:0">Бан Telegram ID ' + esc(id) + '</h2><p class="muted">Не сможет записаться через Mini App, не будет получать рассылки, бот перестанет ему отвечать.</p><label>Причина (видна только админам)</label><input id="banReason" maxlength="200"><div class="row" style="margin-top:12px"><button class="btn bad" id="banGo">🚫 Забанить</button><button class="btn" data-close>Отмена</button></div>');
+    $('#banGo').onclick = function () { act('ban', { userId: String(id), banned: true, reason: $('#banReason').value }, 'Пользователь забанен').then(function (j) { if (j.ok) closeDlg(); }); };
+  }
+  function bindUserButtons(el) {
+    $$('[data-msg]', el).forEach(function (b) { b.onclick = function () { msgDialog(b.dataset.msg); }; });
+    $$('[data-ban]', el).forEach(function (b) { var u = S.users.filter(function (x) { return x.id === b.dataset.ban; })[0]; if (u && u.banned) b.textContent = '✅ Разбанить'; b.onclick = function () { banToggle(b.dataset.ban, !(u && u.banned)); }; });
+  }
+  function vUsers(el) {
+    var q = userQ.toLowerCase(), list = S.users.filter(function (u) { return !q || [u.id, u.name, u.username].join(' ').toLowerCase().indexOf(q) >= 0; });
+    el.innerHTML = '<div class="card"><h2 style="margin-top:0">Бан по Telegram ID</h2><div class="row"><input id="banId" inputmode="numeric" placeholder="Telegram ID" style="flex:1"><button class="btn bad" id="banBtn">🚫 Бан</button><button class="btn" id="unbanBtn">Разбан</button></div></div>' +
+      '<input id="uq" placeholder="🔎 Поиск: имя, @username, ID" value="' + esc(userQ) + '" style="margin-bottom:10px">' +
+      '<div class="muted" style="margin-bottom:8px">Всего: ' + S.users.length + ' · забанено: ' + S.users.filter(function (u) { return u.banned; }).length + '</div>' +
+      (list.length ? '<div class="card list">' + list.map(function (u) {
+        return '<div><div class="row sp"><b>' + esc(u.name || 'Без имени') + (u.username ? ' <span class="muted">@' + esc(u.username) + '</span>' : '') + '</b>' + (u.banned ? '<span class="badge b-cancelled">Бан</span>' : u.blockedBot ? '<span class="badge b-new">Заблокировал бота</span>' : '') + '</div>' +
+          '<div class="muted">ID ' + esc(u.id) + ' · был ' + dt(u.lastSeen) + (u.banReason ? ' · причина: ' + esc(u.banReason) : '') + '</div>' +
+          '<div class="row" style="margin-top:6px"><button class="btn sm" data-msg="' + esc(u.id) + '">✉️ Написать</button><button class="btn sm" data-ban="' + esc(u.id) + '">🚫 Бан</button></div></div>';
+      }).join('') + '</div>' : '<div class="empty">Участников пока нет. Они появятся, когда откроют Mini App или напишут боту.</div>');
+    var uq = $('#uq'); uq.oninput = function () { userQ = uq.value; var pos = uq.selectionStart; vUsers(el); var n = $('#uq'); n.focus(); n.setSelectionRange(pos, pos); };
+    $('#banBtn').onclick = function () { var id = $('#banId').value.trim(); if (!/^\d{3,15}$/.test(id)) return toast('Введите числовой Telegram ID'); banToggle(id, true); };
+    $('#unbanBtn').onclick = function () { var id = $('#banId').value.trim(); if (!/^\d{3,15}$/.test(id)) return toast('Введите числовой Telegram ID'); banToggle(id, false); };
+    bindUserButtons(el);
+  }
+
+  // ---- Админы
+  function vAdmins(el) {
+    var name = function (id) { var u = S.users.filter(function (x) { return x.id === id; })[0]; return u ? esc(u.name || '') + (u.username ? ' @' + esc(u.username) : '') : ''; };
+    el.innerHTML = '<div class="card"><h2 style="margin-top:0">Владельцы</h2><p class="muted">Задаются в .env (ADMIN_IDS). Полный доступ, могут добавлять админов.</p>' +
+      S.admins.owners.map(function (id) { return '<div>👑 ' + esc(id) + ' <span class="muted">' + name(id) + '</span></div>'; }).join('') + '</div>' +
+      '<div class="card list"><h2 style="margin-top:0">Администраторы</h2>' + (S.admins.extra.length ? S.admins.extra.map(function (id) {
+        return '<div class="row sp"><span>🔑 ' + esc(id) + ' <span class="muted">' + name(id) + '</span></span>' + (S.me.owner ? '<button class="btn bad sm" data-rm="' + esc(id) + '">Убрать</button>' : '') + '</div>';
+      }).join('') : '<div class="muted">Пока нет</div>') + '</div>' +
+      (S.me.owner ? '<div class="card"><h2 style="margin-top:0">Добавить админа</h2><p class="muted">Человек может узнать свой ID командой /id в боте.</p><div class="row"><input id="adId" inputmode="numeric" placeholder="Telegram ID" style="flex:1"><button class="btn pri" id="adAdd">Добавить</button></div></div>' : '');
+    $$('[data-rm]', el).forEach(function (b) { b.onclick = function () { confirmAsk('Убрать админа ' + b.dataset.rm + '?').then(function (y) { if (y) act('admins', { userId: b.dataset.rm, remove: true }, 'Админ удалён'); }); }; });
+    if ($('#adAdd')) $('#adAdd').onclick = function () { act('admins', { userId: $('#adId').value.trim() }, 'Админ добавлен'); };
+  }
+
+  // ---- диалог
+  function openDlg(html) { $('#dlgBody').innerHTML = html; $('#dlg').classList.add('open'); $$('[data-close]', $('#dlg')).forEach(function (b) { b.onclick = closeDlg; }); }
+  function closeDlg() { $('#dlg').classList.remove('open'); }
+  $('#dlg').addEventListener('click', function (e) { if (e.target.id === 'dlg') closeDlg(); });
+
+  load();
+})();
+</script>
+</body>
+</html>

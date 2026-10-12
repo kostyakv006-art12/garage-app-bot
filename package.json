@@ -1,0 +1,12 @@
+{
+  "name": "garage-detailing-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Сайт Garage Detailing (Ульяновск) с онлайн-записью в Telegram",
+  "scripts": {
+    "start": "node server.js",
+    "check-telegram": "node tools/check-telegram.js",
+    "test": "node tests/run.js"
+  },
+  "engines": { "node": ">=18" }
+}

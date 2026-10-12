@@ -1,0 +1,136 @@
+{
+  "business": {
+    "name": "Garage Detailing",
+    "city": "Ульяновск",
+    "address": "ул. Автомобилистов, 3",
+    "phone": "+79278363404",
+    "phoneDisplay": "+7 (927) 836-34-04",
+    "vk": "https://vk.ru/ulgaragedetail",
+    "yandexMaps": "https://yandex.ru/maps/org/garage_detailing/92122549266/",
+    "rating": "5.0",
+    "ratingCount": 46,
+    "geo": {
+      "lat": 54.251868,
+      "lon": 48.319854,
+      "note": "Точка для маршрута в навигаторах (ул. Автомобилистов, 3). Проверьте на карте и при необходимости поправьте."
+    }
+  },
+  "schedule": {
+    "timezone": "Europe/Ulyanovsk",
+    "open": "09:00",
+    "close": "20:00",
+    "slotMinutes": 30,
+    "daysAhead": 30,
+    "minLeadMinutes": 60,
+    "closedWeekdays": [],
+    "boxes": 1
+  },
+  "carClasses": [
+    {
+      "id": "sedan",
+      "name": "Седан / хэтчбек",
+      "factor": 1
+    },
+    {
+      "id": "suv",
+      "name": "Кроссовер",
+      "factor": 1.2
+    },
+    {
+      "id": "jeep",
+      "name": "Внедорожник / минивэн",
+      "factor": 1.4
+    }
+  ],
+  "services": [
+    {
+      "id": "wash2",
+      "category": "Мойка",
+      "name": "Двухфазная мойка",
+      "desc": "2 шампуня + коврики, бесконтактная сушка",
+      "price": 600,
+      "minutes": 60,
+      "excludes": [
+        "wash3",
+        "presale"
+      ]
+    },
+    {
+      "id": "wash3",
+      "category": "Мойка",
+      "name": "Трёхфазная мойка",
+      "desc": "3 шампуня + коврики, бесконтактная сушка",
+      "price": 1000,
+      "minutes": 90,
+      "excludes": [
+        "wash2",
+        "presale"
+      ]
+    },
+    {
+      "id": "headlights",
+      "category": "Полировка",
+      "name": "Полировка фар",
+      "desc": "Прозрачность и блеск оптики",
+      "price": 1000,
+      "minutes": 60,
+      "excludes": []
+    },
+    {
+      "id": "polish_local",
+      "category": "Полировка",
+      "name": "Локальная полировка",
+      "desc": "Удаление царапин на отдельных элементах",
+      "price": 1000,
+      "minutes": 120,
+      "excludes": [
+        "polish_full",
+        "presale"
+      ]
+    },
+    {
+      "id": "polish_full",
+      "category": "Полировка",
+      "name": "Полная полировка кузова",
+      "desc": "Глубина цвета, гладкость и зеркальный блеск ЛКП",
+      "price": 10000,
+      "minutes": 480,
+      "excludes": [
+        "polish_local",
+        "presale"
+      ]
+    },
+    {
+      "id": "ceramic",
+      "category": "Защита",
+      "name": "Керамическое покрытие",
+      "desc": "Защита от царапин, реагентов и грязи",
+      "price": 10000,
+      "minutes": 300,
+      "excludes": []
+    },
+    {
+      "id": "interior",
+      "category": "Салон",
+      "name": "Химчистка салона",
+      "desc": "Сиденья, ковры, пластик, потолок",
+      "price": 13000,
+      "minutes": 480,
+      "excludes": []
+    },
+    {
+      "id": "presale",
+      "category": "Комплекс",
+      "name": "Предпродажная подготовка",
+      "desc": "Детейлинг-мойка, полировка, чернение резины, уборка салона, стёкла",
+      "price": 10000,
+      "minutes": 360,
+      "excludes": [
+        "wash2",
+        "wash3",
+        "polish_local",
+        "polish_full"
+      ]
+    }
+  ]
+}

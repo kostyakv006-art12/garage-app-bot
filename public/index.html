@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Garage Detailing — детейлинг и мойка в Ульяновске | Онлайн-запись</title>
+<meta name="description" content="Детейлинг-студия Garage Detailing, Ульяновск, ул. Автомобилистов, 3. Мойка, полировка кузова и фар, керамика, химчистка салона. Онлайн-запись.">
+<meta name="theme-color" content="#07070c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x2='1' y2='1'%3E%3Cstop stop-color='%238b6cff'/%3E%3Cstop offset='.5' stop-color='%232ad4ff'/%3E%3Cstop offset='1' stop-color='%23ff5fd2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M21 11.5a7 7 0 1 0 1 6.5h-6' fill='none' stroke='%2307070c' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+<script src="telegram.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Garage Detailing — на главную">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x2="1" y2="1"><stop stop-color="#8b6cff"/><stop offset=".5" stop-color="#2ad4ff"/><stop offset="1" stop-color="#ff5fd2"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M21 11.5a7 7 0 1 0 1 6.5h-6" fill="none" stroke="#07070c" stroke-width="3" stroke-linecap="round"/></svg>
+      <span>GARAGE <span class="iris">DETAILING</span></span>
+    </a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#services">Услуги</a><a href="#booking">Запись</a><a href="#reviews">Отзывы</a><a href="#contacts">Контакты</a>
+    </nav>
+    <a class="top-phone" data-phone href="tel:+79278363404">📞 <span data-phone-text>+7 (927) 836-34-04</span></a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-label="Главная">
+    <!-- Параллакс: фон в отдельном слое под текстом (z-index 0), текст и кнопки выше (z-index 10) -->
+    <div class="hero-bg">
+      <picture class="hero-layer" data-depth="1">
+        <source media="(max-width:600px)" srcset="hero-mobile.webp" data-img-hero-mobile>
+        <img data-img-hero src="hero.webp" alt="Чёрный автомобиль после полировки в студии с неоновой подсветкой" fetchpriority="high">
+      </picture>
+      <div class="hero-glow hero-layer" data-depth="-1.6" aria-hidden="true"></div>
+    </div>
+    <div class="wrap">
+      <span class="badge">★ <b data-rating>5.0</b> на Яндекс Картах · <span data-rating-count>46</span> оценок</span>
+      <h1>Блеск, который <span class="iris">переливается</span></h1>
+      <p class="lead">Детейлинг-студия в Ульяновске: мойка, полировка, керамика и химчистка салона. Запишитесь онлайн за минуту.</p>
+      <div class="cta">
+        <a class="btn btn-iris" href="#booking">Записаться онлайн</a>
+        <a class="btn btn-ghost" href="#services">Услуги и цены</a>
+      </div>
+      <div class="facts">
+        <div><strong data-address>ул. Автомобилистов, 3</strong><span data-city>Ульяновск</span></div>
+        <div><strong data-hours>09:00–20:00</strong>ежедневно</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="kicker">Услуги</div>
+      <h2>Что сделаем с вашим авто</h2>
+      <p class="sub">Цены указаны «от» для седана. Итог зависит от класса автомобиля и состояния — мастер уточнит при осмотре.</p>
+      <div class="grid" id="svcCards"></div>
+    </div>
+  </section>
+
+<!-- ============ 3D-ОСМОТР «ДО / ПОСЛЕ» — новый блок (вставить после секции #services) ============ -->
+<link rel="stylesheet" href="viewer3d.css">
+<section id="viewer3d" data-model="models/mercedes-maybach-2022.glb" data-model-lite="models/mercedes-maybach-2022-lite.glb" aria-label="3D-осмотр: до и после">
+  <div class="wrap">
+    <div class="kicker">3D-осмотр</div>
+    <h2>Посмотрите результат <span class="iris">до и после</span></h2>
+    <p class="sub">Mercedes-Maybach 2022 в 3D. Выберите, насколько машина грязная, и отметьте услуги — увидите, как она будет выглядеть после нас. Вращайте пальцем или мышью, приближайте колёсиком или щипком.</p>
+    <div class="v3-grid">
+      <div class="v3-stage">
+        <div class="v3-canvas"></div>
+        <div class="v3-status" role="status">Загружаем 3D-модель…</div>
+        <div class="v3-top">
+          <div class="v3-seg" role="group" aria-label="Режим просмотра">
+            <button type="button" data-mode="before" aria-pressed="false">До</button>
+            <button type="button" data-mode="compare" class="on" aria-pressed="true">Сравнить</button>
+            <button type="button" data-mode="after" aria-pressed="false">После</button>
+          </div>
+        </div>
+        <span class="v3-tag v3-tag-before">ДО</span>
+        <span class="v3-tag v3-tag-after">ПОСЛЕ</span>
+        <button type="button" class="v3-split" role="slider" aria-label="Граница сравнения до и после" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></button>
+        <div class="v3-help">Тяните ↔, чтобы сравнить</div>
+        <div class="v3-views" role="group" aria-label="Ракурсы">
+          <button type="button" data-view="three">3/4</button>
+          <button type="button" data-view="front">Спереди</button>
+          <button type="button" data-view="side">Сбоку</button>
+          <button type="button" data-view="rear">Сзади</button>
+          <button type="button" data-view="top">Сверху</button>
+          <button type="button" data-view="low">Снизу</button>
+        </div>
+      </div>
+      <div class="v3-panel">
+        <h3>Степень загрязнения</h3>
+        <div class="v3-levels" role="group" aria-label="Степень загрязнения"></div>
+        <h3>Пакеты</h3>
+        <div class="v3-presets" role="group" aria-label="Пакеты услуг"></div>
+        <h3>Услуги</h3>
+        <p>Можно выбрать несколько — эффекты складываются</p>
+        <div class="v3-services"></div>
+        <div class="v3-note" role="status"></div>
+        <div class="v3-metrics" aria-live="polite"></div>
+        <button type="button" class="btn btn-iris v3-book">Записаться с этими услугами</button>
+        <p class="v3-fine">Визуализация примерная: итог зависит от состояния ЛКП. Салон и двигатель в 3D не показываются.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Three.js с CDN (подгружается только когда блок близко к экрану) -->
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}</script>
+  <script type="module" src="viewer3d.js"></script>
+</section>
+<!-- ============ /3D-ОСМОТР ============ -->
+
+  <section>
+    <div class="wrap">
+      <div class="why">
+        <div><span class="ico">🧴</span><b>Профессиональная химия</b><span>Деликатные шампуни, безопасные для ЛКП и керамики</span></div>
+        <div><span class="ico">✨</span><b>Внимание к деталям</b><span>Мастер сам ведёт каждую машину от приёмки до выдачи</span></div>
+        <div><span class="ico">🛡️</span><b>Защита надолго</b><span>Керамика держит блеск и отталкивает грязь и реагенты</span></div>
+        <div><span class="ico">💳</span><b>Удобная оплата</b><span>Наличные и СБП, подарочные сертификаты</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="booking">
+    <div class="wrap">
+      <div class="kicker">Онлайн-запись</div>
+      <h2>Запишитесь на <span class="iris">мойку и детейлинг</span></h2>
+      <p class="sub">Выберите услуги, дату и свободное время. Заявка сразу придёт мастеру, он перезвонит для подтверждения.</p>
+
+      <form class="booking" id="form" novalidate>
+        <div>
+          <fieldset class="step">
+            <legend class="sr">Класс автомобиля</legend>
+            <h3 aria-hidden="true"><span class="n">1</span>Класс автомобиля</h3>
+            <div class="seg" id="classes"></div>
+            <div class="err" id="err-carClass" role="alert"></div>
+          </fieldset>
+
+          <fieldset class="step">
+            <legend class="sr">Услуги</legend>
+            <h3 aria-hidden="true"><span class="n">2</span>Услуги</h3>
+            <div id="svcList"></div>
+            <div class="notice" id="svcNotice" role="status"></div>
+            <div class="err" id="err-services" role="alert"></div>
+          </fieldset>
+
+          <fieldset class="step" id="whenStep">
+            <legend class="sr">Дата и время</legend>
+            <h3 aria-hidden="true"><span class="n">3</span>Дата и время</h3>
+            <div class="dates" id="dates" role="radiogroup" aria-label="Дата"></div>
+            <div class="times" id="times" role="radiogroup" aria-label="Время"></div>
+            <p class="hint" id="timeHint"></p>
+            <div class="notice" id="timeNotice" role="status"></div>
+            <div class="err" id="err-date" role="alert"></div>
+            <div class="err" id="err-time" role="alert"></div>
+          </fieldset>
+
+          <fieldset class="step">
+            <legend class="sr">Контакты</legend>
+            <h3 aria-hidden="true"><span class="n">4</span>Контакты</h3>
+            <div class="fields">
+              <div class="field"><label for="name">Имя</label><input id="name" name="name" autocomplete="given-name" maxlength="50" required><div class="err" id="err-name"></div></div>
+              <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (9__) ___-__-__" required><div class="err" id="err-phone"></div></div>
+              <div class="field full"><label for="car">Марка и модель авто</label><input id="car" name="car" maxlength="60" placeholder="Например, Kia Rio" required><div class="err" id="err-car"></div></div>
+              <div class="field full"><label for="comment">Комментарий (необязательно)</label><textarea id="comment" name="comment" maxlength="500" placeholder="Пожелания, состояние авто"></textarea><div class="err" id="err-comment"></div></div>
+            </div>
+            <div class="hp" aria-hidden="true"><label>Сайт <input name="website" tabindex="-1" autocomplete="off"></label></div>
+            <label class="consent"><input type="checkbox" id="consent"> <span>Согласен на обработку персональных данных для связи по записи</span></label>
+            <div class="err" id="err-consent"></div>
+          </fieldset>
+        </div>
+
+        <aside class="summary" aria-live="polite">
+          <h3>Ваша запись</h3>
+          <div id="sumBody"></div>
+          <div class="row"><span>Дата и время</span><b id="sumWhen">—</b></div>
+          <div class="row"><span>Длительность</span><b id="sumDur">—</b></div>
+          <div>Итого, ориентировочно</div>
+          <div class="total"><span class="iris" id="sumTotal">0 ₽</span></div>
+          <button class="btn btn-iris" type="submit" id="submit">Записаться</button>
+          <div class="form-err" id="formErr" role="alert"></div>
+          <p class="fine">Окончательная стоимость — после осмотра авто. Оплата: наличные, СБП.</p>
+        </aside>
+      </form>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <div class="wrap">
+      <div class="kicker">Отзывы</div>
+      <h2>Нам доверяют</h2>
+      <p class="sub">Рейтинг <span data-rating>5.0</span> на Яндекс Картах — «Хорошее место 2026».</p>
+      <div class="reviews">
+        <blockquote><div class="stars">★★★★★</div>Машина была после кузовного ремонта вся убитая — химчистка салона и полировка кузова на отлично! Машина как новая, даже знакомые подметили.<b>Ксения</b></blockquote>
+        <blockquote><div class="stars">★★★★★</div>Делал полировку и нанесение проф. керамики. Качество и внимание к деталям при исполнении впечатляют. Однозначно рекомендую.<b>Николай</b></blockquote>
+        <blockquote><div class="stars">★★★★★</div>Полировка, керамика и чистка кожи салона: убрал царапины и разводы, обновил кожу, нанёс антидождь. Авто как новое.<b>Дмитрий</b></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacts">
+    <div class="wrap">
+      <div class="kicker">Контакты</div>
+      <h2>Ждём вас в студии</h2>
+      <div class="contacts">
+        <div class="card glow">
+          <dl>
+            <div><dt>Адрес</dt><dd data-address-full>Ульяновск, ул. Автомобилистов, 3</dd></div>
+            <div><dt>Телефон</dt><dd><a data-phone href="tel:+79278363404" data-phone-text>+7 (927) 836-34-04</a></dd></div>
+            <div><dt>Режим работы</dt><dd data-hours-full>Ежедневно, 09:00–20:00</dd></div>
+          </dl>
+          <div class="links">
+            <a class="btn btn-iris" href="#booking">Записаться</a>
+            <a class="btn btn-ghost" data-vk href="https://vk.ru/ulgaragedetail" target="_blank" rel="noopener">ВКонтакте</a>
+            <a class="btn btn-ghost" data-yandex href="https://yandex.ru/maps/org/garage_detailing/92122549266/" target="_blank" rel="noopener" data-route-open aria-controls="route" aria-expanded="false">Маршрут</a>
+          </div>
+          <!-- Маршрут: самый быстрый путь от клиента до студии — сразу в навигатор (route.js) -->
+          <div class="route" id="route" hidden>
+            <p class="route-title">Построить маршрут от вас <span>навигатор сам выберет самый быстрый путь</span></p>
+            <div class="route-apps">
+              <a class="route-app" data-nav="yandex" href="#" target="_blank" rel="noopener"><i class="ri ri-yandex" aria-hidden="true">Я</i><span><b data-yandex-label>Яндекс Навигатор</b><small>с пробками</small></span></a>
+              <a class="route-app" data-nav="google" href="#" target="_blank" rel="noopener"><i class="ri ri-google" aria-hidden="true">G</i><span><b>Google Maps</b><small>на машине</small></span></a>
+              <a class="route-app" data-nav="2gis" href="#" target="_blank" rel="noopener"><i class="ri ri-2gis" aria-hidden="true">2</i><span><b>2ГИС</b><small>с въездами</small></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="mapbox"><iframe title="Карта: Garage Detailing" loading="lazy" src="https://yandex.ru/map-widget/v1/?oid=92122549266&amp;z=16"></iframe></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>© Garage Detailing, Ульяновск</span><a href="https://vk.ru/ulgaragedetail" target="_blank" rel="noopener">vk.ru/ulgaragedetail</a></div></footer>
+
+<div class="mbar" id="mbar"><div class="sum"><b id="mbTotal">0 ₽</b><span id="mbInfo">Выберите услуги</span></div><button class="btn btn-iris" type="button" id="mbBtn">Записаться</button></div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="card glow">
+    <div class="big">✅</div>
+    <h3 id="mTitle">Заявка отправлена!</h3>
+    <p id="mText"></p>
+    <pre id="mPre" hidden></pre>
+    <button class="btn btn-iris" type="button" id="mClose" style="margin-top:16px">Отлично</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="booking-core.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="parallax.js" defer></script>
+<script src="route.js" defer></script>
+</body>
+</html>

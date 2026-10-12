@@ -1,0 +1,71 @@
+/* ===== Garage Detailing — блок «3D-осмотр» (все классы с префиксом v3-) ===== */
+.v3-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start}
+.v3-stage{--split:50%;position:sticky;top:88px;z-index:4;height:560px;border-radius:var(--r,12px);border:1px solid var(--border);background:radial-gradient(120% 90% at 50% 35%,rgba(139,108,255,.14),rgba(7,7,12,.6) 60%),#0b0b12;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.v3-canvas,.v3-canvas canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;cursor:grab}
+.v3-canvas canvas:active{cursor:grabbing}
+.v3-status{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:15px;text-align:center;padding:24px}
+.v3-status::before{content:"";width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,255,255,.15);border-top-color:var(--cyan);animation:v3spin 1s linear infinite;display:block;margin:0 auto 12px}
+@keyframes v3spin{to{transform:rotate(360deg)}}
+.v3-top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;z-index:3}
+.v3-top>*{pointer-events:auto}
+.v3-seg{display:inline-flex;padding:4px;border-radius:10px;background:rgba(7,7,12,.7);border:1px solid var(--border);backdrop-filter:blur(8px)}
+.v3-seg button,.v3-views button,.v3-chip{min-height:40px;padding:0 14px;border:0;border-radius:8px;background:transparent;color:var(--muted);font-family:inherit;font-weight:600;font-size:14px;line-height:1;cursor:pointer;white-space:nowrap}
+.v3-seg button.on{background:var(--iris);background-size:300% 100%;animation:shift 8s linear infinite;color:#0a0a12}
+.v3-tag{position:absolute;top:68px;z-index:2;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:800;letter-spacing:.1em;background:rgba(7,7,12,.75);border:1px solid var(--border)}
+.v3-tag-before{left:12px;color:#ffb27a}
+.v3-tag-after{right:12px;color:var(--cyan)}
+.v3-split{display:none;position:absolute;top:0;bottom:0;left:var(--split);width:44px;margin-left:-22px;z-index:2;cursor:ew-resize;touch-action:none;background:none;border:0;padding:0}
+.v3-split::before{content:"";position:absolute;top:0;bottom:0;left:21px;width:2px;background:linear-gradient(#8b6cff,#2ad4ff,#ff5fd2)}
+.v3-split::after{content:"↔";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#11111a;border:2px solid var(--cyan);color:var(--text);font-size:18px}
+.v3-ready.v3-compare .v3-split{display:block}
+.v3-views{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;display:flex;gap:6px;overflow-x:auto;padding:4px;border-radius:10px;background:rgba(7,7,12,.7);border:1px solid var(--border);backdrop-filter:blur(8px);scrollbar-width:none}
+.v3-views::-webkit-scrollbar{display:none}
+.v3-views button{flex:1 0 auto;background:var(--surface)}
+.v3-views button:hover,.v3-seg button:hover{color:var(--text)}
+.v3-help{display:none;position:absolute;bottom:72px;left:0;right:0;text-align:center;font-size:13px;color:var(--muted);pointer-events:none;z-index:1}
+.v3-panel{padding:24px;border-radius:var(--r,12px);border:1px solid var(--border);background:rgba(14,14,22,.85)}
+.v3-panel h3{font-size:17px;margin:0 0 12px}
+.v3-panel h3+p{color:var(--muted);font-size:14px;margin:-6px 0 12px}
+.v3-levels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:24px}
+.v3-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:24px}
+.v3-presets .v3-chip{font-size:13px;padding:0 4px}
+.v3-chip{padding:0;border:1px solid var(--border);background:var(--surface);color:var(--text)}
+.v3-chip.on{border-color:var(--cyan);background:rgba(42,212,255,.12);box-shadow:inset 0 0 0 1px var(--cyan)}
+.v3-services{display:grid;gap:6px}
+.v3-check{display:flex;gap:12px;align-items:center;min-height:48px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:15px;line-height:1.25}
+.v3-check input{position:absolute;opacity:0;pointer-events:none}
+.v3-check small{display:block;color:var(--muted);font-size:13px;font-weight:400}
+.v3-check b{font-weight:600}
+.v3-box{width:20px;height:20px;flex:none;border-radius:6px;border:1.5px solid rgba(255,255,255,.4);display:grid;place-items:center}
+.v3-check:has(input:checked){border-color:var(--cyan);background:rgba(42,212,255,.08)}
+.v3-check input:checked+.v3-box{background:var(--cyan);border-color:var(--cyan)}
+.v3-check input:checked+.v3-box::after{content:"";width:5px;height:10px;border:solid #07070c;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.v3-check input:focus-visible+.v3-box{outline:2px solid var(--cyan);outline-offset:2px}
+.v3-note{font-size:13px;color:#ffd9a0;margin-top:8px}
+.v3-note:empty{display:none}
+.v3-metrics{display:grid;gap:10px;margin:24px 0 16px}
+.v3-m-top{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:4px}
+.v3-m-top b{color:var(--text)}
+.v3-bar{position:relative;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.v3-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;transition:width .5s ease}
+.v3-bar-a{background:var(--iris);background-size:300% 100%;animation:shift 8s linear infinite}
+.v3-bar-b{background:rgba(255,178,122,.55);z-index:1;height:2px;top:2px!important}
+.v3-book{width:100%}
+.v3-fine{font-size:12px;color:var(--muted);margin-top:10px}
+@media (max-width:960px){.v3-grid{grid-template-columns:minmax(0,1fr)}.v3-stage{height:min(56vh,480px)}}
+@media (max-width:600px){
+  /* машина «прилипает» сверху, пока листаете услуги под ней */
+  .v3-stage{top:60px;height:min(48vh,400px);margin:0 -4px}
+  .v3-top{top:8px;left:8px;right:8px}
+  .v3-seg button{padding:0 10px;font-size:13px}
+  .v3-tag{top:60px}
+  .v3-help{bottom:66px;font-size:12px}
+  .v3-views{left:8px;right:8px;bottom:8px}
+  .v3-views button{padding:0 10px;font-size:13px}
+  .v3-panel{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){.v3-bar i{transition:none}}
+.v3-status[hidden],.v3-tag[hidden]{display:none}
+.v3-ready.v3-compare .v3-help{display:block}
+.v3-err{display:block;margin-top:6px;opacity:.6;font-size:12px}
+.v3-retry{margin-top:12px;min-height:40px;padding:0 18px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:inherit;font:inherit;cursor:pointer}

@@ -1,0 +1,51 @@
+<!-- ============ 3D-ОСМОТР «ДО / ПОСЛЕ» — новый блок (вставить после секции #services) ============ -->
+<link rel="stylesheet" href="viewer3d.css">
+<section id="viewer3d" data-model="models/mercedes-maybach-2022.glb" data-model-lite="models/mercedes-maybach-2022-lite.glb" aria-label="3D-осмотр: до и после">
+  <div class="wrap">
+    <div class="kicker">3D-осмотр</div>
+    <h2>Посмотрите результат <span class="iris">до и после</span></h2>
+    <p class="sub">Mercedes-Maybach 2022 в 3D. Выберите, насколько машина грязная, и отметьте услуги — увидите, как она будет выглядеть после нас. Вращайте пальцем или мышью, приближайте колёсиком или щипком.</p>
+    <div class="v3-grid">
+      <div class="v3-stage">
+        <div class="v3-canvas"></div>
+        <div class="v3-status" role="status">Загружаем 3D-модель…</div>
+        <div class="v3-top">
+          <div class="v3-seg" role="group" aria-label="Режим просмотра">
+            <button type="button" data-mode="before" aria-pressed="false">До</button>
+            <button type="button" data-mode="compare" class="on" aria-pressed="true">Сравнить</button>
+            <button type="button" data-mode="after" aria-pressed="false">После</button>
+          </div>
+        </div>
+        <span class="v3-tag v3-tag-before">ДО</span>
+        <span class="v3-tag v3-tag-after">ПОСЛЕ</span>
+        <button type="button" class="v3-split" role="slider" aria-label="Граница сравнения до и после" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></button>
+        <div class="v3-help">Тяните ↔, чтобы сравнить</div>
+        <div class="v3-views" role="group" aria-label="Ракурсы">
+          <button type="button" data-view="three">3/4</button>
+          <button type="button" data-view="front">Спереди</button>
+          <button type="button" data-view="side">Сбоку</button>
+          <button type="button" data-view="rear">Сзади</button>
+          <button type="button" data-view="top">Сверху</button>
+          <button type="button" data-view="low">Снизу</button>
+        </div>
+      </div>
+      <div class="v3-panel">
+        <h3>Степень загрязнения</h3>
+        <div class="v3-levels" role="group" aria-label="Степень загрязнения"></div>
+        <h3>Пакеты</h3>
+        <div class="v3-presets" role="group" aria-label="Пакеты услуг"></div>
+        <h3>Услуги</h3>
+        <p>Можно выбрать несколько — эффекты складываются</p>
+        <div class="v3-services"></div>
+        <div class="v3-note" role="status"></div>
+        <div class="v3-metrics" aria-live="polite"></div>
+        <button type="button" class="btn btn-iris v3-book">Записаться с этими услугами</button>
+        <p class="v3-fine">Визуализация примерная: итог зависит от состояния ЛКП. Салон и двигатель в 3D не показываются.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Three.js с CDN (подгружается только когда блок близко к экрану) -->
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}</script>
+  <script type="module" src="viewer3d.js"></script>
+</section>
+<!-- ============ /3D-ОСМОТР ============ -->
